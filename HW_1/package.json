@@ -11,12 +11,12 @@
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"command-line-args": "^5.2.1",
 		"eslint": "^8.56.0",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-plugin-import": "^2.29.1"
 	},
 	"dependencies": {
+		"command-line-args": "^5.2.1",
 		"nodemon": "^3.0.3"
 	}
 }
