@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid' // использовал эту библиотеку так как crypto.randomUUID() не хотел работать
 
 enum CurrencyEnum {
 	USD = 'USD',
