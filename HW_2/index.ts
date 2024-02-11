@@ -36,7 +36,7 @@ class Card {
 		if (type instanceof Transaction) {
 			this.transactions.push(type)
 			return type.id
-		} else if (typeof type === 'number' && currency) {
+		} else if (typeof type === 'number' && currency !== undefined) {
 			const transaction = new Transaction(type, currency)
 			this.transactions.push(transaction)
 			return transaction.id
