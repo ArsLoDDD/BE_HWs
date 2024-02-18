@@ -1,0 +1,58 @@
+{
+	"newspost": [
+		{
+			"id": 6312964784,
+			"createDate": "2024-02-18T17:02:23.237Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		},
+		{
+			"id": 4031518604,
+			"createDate": "2024-02-18T17:02:25.131Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		},
+		{
+			"id": 8499974580,
+			"createDate": "2024-02-18T17:04:56.108Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		},
+		{
+			"id": 559142299,
+			"createDate": "2024-02-18T17:05:11.913Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		},
+		{
+			"id": 7529961054,
+			"createDate": "2024-02-18T17:05:19.180Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		},
+		{
+			"id": 7642491542,
+			"createDate": "2024-02-18T17:05:21.962Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		},
+		{
+			"id": 2087267439,
+			"createDate": "2024-02-18T17:05:23.834Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		},
+		{
+			"id": 5857486234,
+			"createDate": "2024-02-18T17:05:25.621Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		}
+	],
+	"schema": {
+		"id": "number",
+		"title": "string",
+		"text": "string",
+		"createDate": "date"
+	}
+}
