@@ -22,9 +22,17 @@ class Transaction implements ITransaction {
 		this.currency = currency
 	}
 }
-class Card {
-	transactions: Transaction[]
 
+interface ICard {
+	transactions: Transaction[]
+	addTransaction(transaction: Transaction): string
+	addTransaction(amount: number, currency: CurrencyEnum): string
+	getTransaction(id: string): Transaction | undefined
+	getBalance(currency: CurrencyEnum): number
+}
+
+class Card implements ICard {
+	transactions: Transaction[]
 	constructor() {
 		this.transactions = []
 	}
@@ -61,14 +69,76 @@ class Card {
 	}
 }
 
-export { Card, Transaction, CurrencyEnum }
+class BonusCard extends Card implements ICard {
+	constructor() {
+		super()
+	}
 
-// const card = new Card()
-// card.addTransaction(100, CurrencyEnum.USD)
-// card.addTransaction(100, CurrencyEnum.USD)
-// card.addTransaction(345, CurrencyEnum.USD)
-// card.addTransaction(new Transaction(300, CurrencyEnum.USD))
-// card.addTransaction(3999, CurrencyEnum.UAH)
+	addTransaction(transaction: Transaction): string
+	addTransaction(amount: number, currency: CurrencyEnum): string
 
-// console.log('Your UAH balance:', card.getBalance(CurrencyEnum.UAH))
-// console.log('Your USD balance:', card.getBalance(CurrencyEnum.USD))
+	addTransaction(type: Transaction | number, currency?: CurrencyEnum): string {
+		if (type instanceof Transaction) {
+			const bonusTransaction = new Transaction(type.amount * 1.1, type.currency)
+			this.transactions.push(bonusTransaction)
+			return super.addTransaction(type)
+		} else if (typeof type === 'number' && currency !== undefined) {
+			const bonusTransaction = new Transaction(type * 1.1, currency)
+			this.transactions.push(bonusTransaction)
+			return super.addTransaction(type, currency)
+		}
+		return 'Invalid input'
+	}
+
+	getBalance(currency: CurrencyEnum): number {
+		return this.transactions.reduce(
+			(acc: number, transaction: Transaction): number => {
+				if (transaction.currency === currency) {
+					return (acc += transaction.amount)
+				}
+				return acc
+			},
+			0
+		)
+	}
+}
+
+class Pocket {
+	cards: Record<string, Card>[]
+	constructor() {
+		this.cards = []
+	}
+	addCard(name: string, card: Card): Card {
+		this.cards.push({ [name]: card })
+		return card
+	}
+	removeCard(name: string): Record<string, Card>[] {
+		this.cards = this.cards.filter(card => Object.keys(card)[0] !== name)
+		return this.cards
+	}
+	getCard(name: string): Card | string {
+		console.log(name)
+		const userCard = this.cards.find(card => Object.keys(card)[0] === name)
+		if (userCard) return userCard[name]
+		return 'Card not found'
+	}
+	getTotalAmount(currency: CurrencyEnum): number {
+		return this.cards.reduce(
+			(acc: number, card: Record<string, Card>): number => {
+				return (acc += Object.values(card)[0].getBalance(currency))
+			},
+			0
+		)
+	}
+}
+
+export {
+	Card,
+	Transaction,
+	CurrencyEnum,
+	BonusCard,
+	Pocket,
+	ICard,
+	ITransaction,
+}
+

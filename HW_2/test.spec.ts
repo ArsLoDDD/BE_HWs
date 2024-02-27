@@ -1,50 +1,52 @@
-import { Card, Transaction, CurrencyEnum } from './index'
+import { Pocket, Card, Transaction, CurrencyEnum } from './index'
 
-describe('Card', () => {
-  let card: Card;
+describe('Pocket', () => {
+	let pocket: Pocket
+	let card1: Card
+	let card2: Card
 
-  beforeEach(() => {
-    card = new Card();
-  });
+	beforeEach(() => {
+		pocket = new Pocket()
+		card1 = new Card()
+		card2 = new Card()
+		pocket.addCard('card1', card1)
+		pocket.addCard('card2', card2)
+	})
 
-  it('should add transaction by object and return its ID', () => {
-    const transaction = new Transaction(100, CurrencyEnum.USD);
-    const id = card.addTransaction(transaction);
-    expect(id).toBe(transaction.id);
-  });
+	test('addCard should add a new card to the pocket', () => {
+		expect(pocket.cards.length).toBe(2)
+		const newCard = new Card()
+		pocket.addCard('newCard', newCard)
+		expect(pocket.cards.length).toBe(3)
+	})
 
-  it('should add transaction by amount and currency and return its ID', () => {
-    const amount = 200;
-    const currency = CurrencyEnum.UAH;
-    const id = card.addTransaction(amount, currency);
-    const addedTransaction = card.getTransaction(id);
-    expect(addedTransaction).toBeDefined();
-    expect(addedTransaction!.amount).toBe(amount);
-    expect(addedTransaction!.currency).toBe(currency);
-  });
+	test('getCard should return the card with the given name', () => {
+		const retrievedCard = pocket.getCard('card1')
+		expect(retrievedCard).toBe(card1)
+	})
 
-  it('should get transaction by ID', () => {
-    const transaction = new Transaction(150, CurrencyEnum.USD);
-    const id = card.addTransaction(transaction);
-    const retrievedTransaction = card.getTransaction(id);
-    expect(retrievedTransaction).toBe(transaction);
-  });
+	test('getCard should return "Card not found" if the card with the given name does not exist', () => {
+		const retrievedCard = pocket.getCard('nonExistentCard')
+		expect(retrievedCard).toBe('Card not found')
+	})
 
-  it('should return undefined for non-existent transaction ID', () => {
-    const retrievedTransaction = card.getTransaction('non-existent-id');
-    expect(retrievedTransaction).toBeUndefined();
-  });
+	test('removeCard should remove the card with the given name', () => {
+		expect(pocket.cards.length).toBe(2)
+		pocket.removeCard('card1')
+		expect(pocket.cards.length).toBe(1)
+		const retrievedCard = pocket.getCard('card1')
+		expect(retrievedCard).toBe('Card not found')
+	})
 
-  it('should calculate balance correctly for a specific currency', () => {
-    card.addTransaction(100, CurrencyEnum.USD);
-    card.addTransaction(200, CurrencyEnum.USD);
-    card.addTransaction(300, CurrencyEnum.UAH);
-    card.addTransaction(400, CurrencyEnum.USD);
-    expect(card.getBalance(CurrencyEnum.USD)).toBe(700);
-    expect(card.getBalance(CurrencyEnum.UAH)).toBe(300);
-  });
+	test('getTotalAmount should return the total balance across all cards in the specified currency', () => {
+		// Mock transactions
+		card1.addTransaction(new Transaction(100, CurrencyEnum.USD))
+		card1.addTransaction(new Transaction(200, CurrencyEnum.USD))
+		card2.addTransaction(new Transaction(50, CurrencyEnum.UAH))
 
-  it('should return 0 balance for non-existent currency', () => {
-    expect(card.getBalance(CurrencyEnum.UAH)).toBe(0);
-  });
-});
+		// Total balance in USD: 100 + 200 = 300
+		// Total balance in UAH: 50
+		expect(pocket.getTotalAmount(CurrencyEnum.USD)).toBe(300)
+		expect(pocket.getTotalAmount(CurrencyEnum.UAH)).toBe(50)
+	})
+})
