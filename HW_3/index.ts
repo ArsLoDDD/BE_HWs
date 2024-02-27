@@ -13,6 +13,7 @@ class FileDB {
 	path: string
 	schemas: Record<string, Schema> = {}
 	currentTables: Record<string, TableDB> = {}
+	private static instance: FileDB
 
 	constructor(path: string) {
 		if (!fs.existsSync(path)) {
@@ -20,6 +21,14 @@ class FileDB {
 		}
 		this.path = path
 		this.currentTables = {}
+	}
+	public static getInstance(path: string): FileDB {
+		if (!FileDB.instance) {
+			console.log('123')
+			FileDB.instance = new FileDB(path)
+		}
+		console.log('321')
+		return FileDB.instance
 	}
 	async initFiles(): Promise<Record<string, TableDB>> {
 		const files = await fsPromise.readdir(this.path)
@@ -98,26 +107,12 @@ class TableDB {
 	}
 	//C
 	async create(newData: Schema): Promise<void | Schema> {
-		const fileData = await this.getFileData()
-
-		// console.log('fileData', fileData)
-		if (fileData) {
-			const existingItem = fileData[this.tableName].find(
-				(item: any) => item.id === newData.id
-			)
-			if (existingItem) {
-				console.log(
-					`Item with id ${newData.id} already exists in the table ${this.tableName}`
-				)
-				return
-			}
-		}
 		if (!this.isValidData(newData)) {
 			return
 		}
 		const lastData = Object.assign(
 			{
-				id: parseInt(uuidv4().replace(/\D/g, '').substring(0, 10)),
+				id: uuidv4(),
 				createDate: new Date(),
 			},
 			newData
@@ -127,14 +122,14 @@ class TableDB {
 		return lastData
 	}
 	//R
-	getById(id: number): Schema {
+	getById(id: string): Schema {
 		return this.data[this.tableName].find((item: any) => item.id === id)
 	}
 	getAll(): Schema[] {
 		return this.data[this.tableName]
 	}
 	//U
-	async update(id: number, newData: Schema): Promise<void | Schema> {
+	async update(id: string, newData: Schema): Promise<void | Schema> {
 		const parsedData = await this.getFileData()
 		if (!parsedData[this.tableName].find((item: any) => item.id === id)) {
 			console.log(
@@ -148,6 +143,8 @@ class TableDB {
 		let updatedObj: Schema = {}
 		const newDataArr = parsedData[this.tableName].map((item: any) => {
 			if (item.id === id) {
+				console.log(item, 'ASADKAJSBDKASJDNAKSJDN')
+
 				updatedObj = {
 					...item,
 					...newData,
@@ -162,7 +159,7 @@ class TableDB {
 		return updatedObj
 	}
 	//D
-	async delete(id: number): Promise<void | number> {
+	async delete(id: string): Promise<void | string> {
 		const parsedData = await this.getFileData()
 		if (!parsedData[this.tableName].find((item: any) => item.id === id)) {
 			console.log(
@@ -180,7 +177,7 @@ class TableDB {
 	//Other
 	async getFileData(): Promise<Schema> {
 		const fileData = await fsPromise.readFile(
-			path.join(__dirname + '/DB/FileDB', `${this.tableName}.json`),
+			path.join(__dirname, 'DB/FileDB', `${this.tableName}.json`),
 			'utf-8'
 		)
 		return JSON.parse(fileData)
@@ -190,6 +187,7 @@ class TableDB {
 		const newKeys = Object.keys(data)
 		const schemaKeys = Object.keys(this.schema)
 		const isValid = newKeys.every(key => schemaKeys.includes(key))
+
 		if (!isValid) {
 			console.error(
 				`Error creating item in table ${this.tableName}: Data fields do not match the schema`
@@ -213,30 +211,36 @@ class TableDB {
 }
 
 const newspostSchema = {
-	id: Number,
+	id: String,
 	title: String,
 	text: String,
 	createDate: Date,
 }
 const newDaySchema = {
-	id: Number,
+	id: String,
 	createDate: Date,
 }
 
 ;(async () => {
-	const fileDB = new FileDB(path.join(__dirname + '/DB', 'FileDB'))
-	// await fileDB.registerSchema('newspost', newspostSchema)
+	const fileDB = FileDB.getInstance(path.join(__dirname + '/DB', 'FileDB'))
+	await fileDB.registerSchema('newspost', newspostSchema)
 	// await fileDB.registerSchema('newDay', newDaySchema)
 	await fileDB.initFiles()
 	// console.log(await fileDB.initFiles())
 	const newspostTable = await fileDB.getTable('newspost')
 	// console.log(newspostTable)
-	console.log(
-		await newspostTable.create({
-			title: 'asasdwqe123123',
-			text: 'Text',
-		})
-	)
+	// await newspostTable.create({
+	// 	title: 'asasdwqe123123',
+	// 	text: 'Text',
+	// })
+
+	// const sdaasd = await newspostTable.update(
+	// 	'd816bc69-c1a6-457d-a26e-067b8326c3cc',
+	// 	{
+	// 		title: '1',
+	// 		text: 'SADASDAS213D',
+	// 	}
+	// )
 
 	// const newDayTable = await fileDB.getTable('newDay')
 })()
