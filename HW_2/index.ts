@@ -69,21 +69,18 @@ class Card implements ICard {
 	}
 }
 
-class BonusCard extends Card implements ICard {
+class BonusCard extends Card {
 	constructor() {
 		super()
 	}
 
-	addTransaction(transaction: Transaction): string
-	addTransaction(amount: number, currency: CurrencyEnum): string
-
 	addTransaction(type: Transaction | number, currency?: CurrencyEnum): string {
 		if (type instanceof Transaction) {
-			const bonusTransaction = new Transaction(type.amount * 1.1, type.currency)
+			const bonusTransaction = new Transaction(type.amount * 0.1, type.currency)
 			this.transactions.push(bonusTransaction)
 			return super.addTransaction(type)
 		} else if (typeof type === 'number' && currency !== undefined) {
-			const bonusTransaction = new Transaction(type * 1.1, currency)
+			const bonusTransaction = new Transaction(type * 0.1, currency)
 			this.transactions.push(bonusTransaction)
 			return super.addTransaction(type, currency)
 		}
@@ -108,13 +105,11 @@ class Pocket {
 	constructor() {
 		this.cards = []
 	}
-	addCard(name: string, card: Card): Card {
+	addCard(name: string, card: Card): void {
 		this.cards.push({ [name]: card })
-		return card
 	}
-	removeCard(name: string): Record<string, Card>[] {
+	removeCard(name: string): void {
 		this.cards = this.cards.filter(card => Object.keys(card)[0] !== name)
-		return this.cards
 	}
 	getCard(name: string): Card | string {
 		console.log(name)
@@ -141,4 +136,3 @@ export {
 	ICard,
 	ITransaction,
 }
-
