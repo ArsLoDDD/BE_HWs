@@ -1,1 +1,40 @@
-{"newspost":[{"id":"d816bc69-c1a6-457d-a26e-067b8326c3cc","createDate":"2024-02-27T08:50:22.712Z","title":"1","text":"SADASDAS213D"},{"id":"e78af971-8cfc-484a-b3e8-d74191ce9dfe","createDate":"2024-02-27T08:50:25.907Z","title":"asasdwqe123123","text":"Text"},{"id":"6d5eda76-3365-4b2c-9a62-6e5c1948905d","createDate":"2024-02-27T08:50:53.679Z","title":"asasdwqe123123","text":"Text"},{"id":"6bda2512-926d-462b-a64a-2ea47e69902a","createDate":"2024-02-27T08:52:06.290Z","title":"asasdwqe123123","text":"Text"},{"id":"7842f25c-8147-437f-b225-266f6ddff78b","createDate":"2024-02-27T08:56:26.895Z","title":"asasdwqe123123","text":"Text"}],"schema":{"id":"string","title":"string","text":"string","createDate":"date"}}
+{
+	"newspost": [
+		{
+			"id": "d816bc69-c1a6-457d-a26e-067b8326c3cc",
+			"createDate": "2024-02-27T08:50:22.712Z",
+			"title": "1",
+			"text": "SADASDAS213D"
+		},
+		{
+			"id": "e78af971-8cfc-484a-b3e8-d74191ce9dfe",
+			"createDate": "2024-02-27T08:50:25.907Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		},
+		{
+			"id": "6d5eda76-3365-4b2c-9a62-6e5c1948905d",
+			"createDate": "2024-02-27T08:50:53.679Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		},
+		{
+			"id": "6bda2512-926d-462b-a64a-2ea47e69902a",
+			"createDate": "2024-02-27T08:52:06.290Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		},
+		{
+			"id": "7842f25c-8147-437f-b225-266f6ddff78b",
+			"createDate": "2024-02-27T08:56:26.895Z",
+			"title": "asasdwqe123123",
+			"text": "Text"
+		}
+	],
+	"schema": {
+		"id": "string",
+		"title": "string",
+		"text": "string",
+		"createDate": "date"
+	}
+}
